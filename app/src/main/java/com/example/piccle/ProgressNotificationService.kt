@@ -1,5 +1,16 @@
 package learn.kotlin.com.pictureclient.progress
 
+import android.app.*
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
+import android.os.Build
+import android.os.IBinder
+import com.example.piccle.Constants
+import com.example.piccle.MainActivity
+import com.example.piccle.R
+import com.example.piccle.SharedData
+
 
 class ProgressNotificationService : Service() {
     private var mCurrentFileCount: Int = 0

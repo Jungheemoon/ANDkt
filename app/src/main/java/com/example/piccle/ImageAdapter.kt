@@ -60,7 +60,7 @@ class ImageAdapter(private val mContext: Context, private val mCellLayout: Int,
                 if (mImageList[position].mType === Constants.TYPE_IMAGE) {
                     bmp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(path), 100, 100)
                 } else if (mImageList[position].mType === Constants.TYPE_VIDEO) {
-                    bmp = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Images.Thumbnails.MINI_KIND)
+                    bmp = path?.let { ThumbnailUtils.createVideoThumbnail(it, MediaStore.Images.Thumbnails.MINI_KIND) }
                 }
                 bmp?.let {
                     holder.mIvImage?.setImageBitmap(it)

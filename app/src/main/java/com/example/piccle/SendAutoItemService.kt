@@ -1,6 +1,19 @@
 package learn.kotlin.com.pictureclient.mode.auto
 
-
+import android.app.Service
+import android.content.Intent
+import android.os.IBinder
+import android.provider.MediaStore
+import android.util.Log
+import com.example.piccle.AutoImageData
+import com.example.piccle.Constants
+import com.example.piccle.Constants.Companion.TAG
+import com.example.piccle.SharedData
+import java.io.BufferedInputStream
+import java.io.DataOutputStream
+import java.io.FileInputStream
+import java.net.Socket
+import java.util.ArrayList
 
 class SendAutoItemService : Service() {
     private var mServerIp: String? = null
@@ -33,20 +46,20 @@ class SendAutoItemService : Service() {
             null,
             MediaStore.Images.Media.DATE_TAKEN + " desc "
         ) // 내림차순
-        val imageDateIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN)
-        val imageDataIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.DATA)
+        val imageDateIndex = imageCursor?.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN)
+        val imageDataIndex = imageCursor?.getColumnIndex(MediaStore.Images.Media.DATA)
         // 최신 사진부터 전송
         if (imageCursor != null && imageCursor.count > 0) {
             imageCursor.moveToFirst() //내림차순이라 첫번째가 최신 사진
             while (true) {
-                val imageDate = imageCursor.getString(imageDateIndex)
-                val imageData = imageCursor.getString(imageDataIndex)
+                val imageDate = imageDateIndex?.let { imageCursor.getString(it) }
+                val imageData = imageDataIndex?.let { imageCursor.getString(it) }
                 // 최종 동기화 날짜보다 이전 날짜일 경우 중지
-                if (!isValidDate(lastDate, imageDate)) {
+                if (!imageDate?.let { isValidDate(lastDate, it) }!!) {
                     break
                 }
-                val index = imageData.lastIndexOf("/") + 1
-                val file = imageData.substring(index, imageData.length)
+                val index = imageData?.lastIndexOf("/")?.plus(1)
+                val file = index?.let { imageData?.substring(it, imageData.length) }
                 Log.d("TAG","imageData : " + imageData + " file : " + file);
                 val image = AutoImageData()
                 image.mFile = file
@@ -70,20 +83,20 @@ class SendAutoItemService : Service() {
                 null,
                 MediaStore.Video.Media.DATE_TAKEN + " desc "
             )
-        val videoDateIndex = videoCursor.getColumnIndex(MediaStore.Video.Media.DATE_TAKEN)
-        val videoDataIndex = videoCursor.getColumnIndex(MediaStore.Video.Media.DATA)
+        val videoDateIndex = videoCursor?.getColumnIndex(MediaStore.Video.Media.DATE_TAKEN)
+        val videoDataIndex = videoCursor?.getColumnIndex(MediaStore.Video.Media.DATA)
         // 최신 동영상부터 전송
         if (videoCursor != null && videoCursor.count > 0) {
             videoCursor.moveToFirst()
             while (true) {
-                val videoDate = videoCursor.getString(videoDateIndex)
-                val videoData = videoCursor.getString(videoDataIndex)
+                val videoDate = videoDateIndex?.let { videoCursor.getString(it) }
+                val videoData = videoDataIndex?.let { videoCursor.getString(it) }
                 // 최종 동기화 날짜보다 이전 날짜일 경우 중지
-                if (!isValidDate(lastDate, videoDate)) {
+                if (!videoDate?.let { isValidDate(lastDate, it) }!!) {
                     break
                 }
-                val index = videoData.lastIndexOf("/") + 1
-                val file = videoData.substring(index, videoData.length)
+                val index = videoData?.lastIndexOf("/")?.plus(1)
+                val file = index?.let { videoData?.substring(it, videoData.length) }
                 val image = AutoImageData()
                 image.mFile = file
                 image.mData = videoData

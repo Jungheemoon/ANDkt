@@ -6,6 +6,7 @@ import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -14,6 +15,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import kotlinx.android.synthetic.main.activity_send_selected_item.*
 import learn.kotlin.com.pictureclient.progress.ProgressActivity
 import learn.kotlin.com.pictureclient.progress.ProgressNotificationService
 
@@ -120,7 +122,9 @@ class SendSelectedItemActivity : AppCompatActivity(), AdapterView.OnItemClickLis
                     ) { dialog, whichButton ->
                         val dirName = input.text.toString()
                         mSharedData.isConnected = false
-                        startSendService(dirName, serverIp)
+                        if (serverIp != null) {
+                            startSendService(dirName, serverIp)
+                        }
                         finish()
                     }
                     alert.setNegativeButton("취소",
@@ -174,14 +178,14 @@ class SendSelectedItemActivity : AppCompatActivity(), AdapterView.OnItemClickLis
             imageProjection, null, null, MediaStore.Images.Media.DATE_TAKEN + " desc "
         )
 
-        val imageDataIndex = ImageCursor.getColumnIndex(MediaStore.Images.Media.DATA)
+        val imageDataIndex = ImageCursor?.getColumnIndex(MediaStore.Images.Media.DATA)
 
         if (ImageCursor != null) {
             ImageCursor.moveToFirst()
             while (true) {
                 // 컬럼 인덱스
                 val image = SelectedImageData()
-                image.mData = ImageCursor.getString(imageDataIndex)
+                image.mData = imageDataIndex?.let { ImageCursor.getString(it) }
                 image.mType = Constants.TYPE_IMAGE
                 image.mCheckedState = false
                 mAllImageList.add(image)
@@ -190,21 +194,23 @@ class SendSelectedItemActivity : AppCompatActivity(), AdapterView.OnItemClickLis
                 }
             }
         }
-        ImageCursor.close()
+        if (ImageCursor != null) {
+            ImageCursor.close()
+        }
 
         val videoCursor = contentResolver.query(
             MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
             videoProjection, null, null, MediaStore.Video.Media.DATE_TAKEN + " desc "
         )
 
-        val videoDataIndex = videoCursor.getColumnIndex(MediaStore.Video.Media.DATA)
+        val videoDataIndex = videoCursor?.getColumnIndex(MediaStore.Video.Media.DATA)
 
         if (videoCursor != null) {
             videoCursor.moveToFirst()
             while (true) {
                 // 컬럼 인덱스
                 val image = SelectedImageData()
-                image.mData = videoCursor.getString(videoDataIndex)
+                image.mData = videoDataIndex?.let { videoCursor.getString(it) }
                 image.mCheckedState = false
                 image.mType = Constants.TYPE_VIDEO
                 mAllVideoList.add(image)
@@ -213,7 +219,9 @@ class SendSelectedItemActivity : AppCompatActivity(), AdapterView.OnItemClickLis
                 }
             }
         }
-        videoCursor.close()
+        if (videoCursor != null) {
+            videoCursor.close()
+        }
         return (mAllImageList.size + mAllVideoList.size)
     }
 
