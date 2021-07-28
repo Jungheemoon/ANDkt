@@ -20,8 +20,8 @@ import java.io.DataOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 import java.net.*
-import java.util.*
 import kotlinx.android.synthetic.main.activity_main.*
+import learn.kotlin.com.pictureclient.mode.auto.SendAutoItemActivity
 
 class MainActivity : AppCompatActivity() {
     private var mPartialAp = arrayOfNulls<String>(3)

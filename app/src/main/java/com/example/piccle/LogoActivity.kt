@@ -1,10 +1,14 @@
 package com.example.piccle
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.os.Process
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class LogoActivity : AppCompatActivity() {
@@ -26,20 +30,22 @@ class LogoActivity : AppCompatActivity() {
     }
 
     internal inner class WifiStateHandler : Handler() {
+        
         override fun handleMessage(msg: Message) {
+            val id_wifi_state_info : TextView = findViewById(R.id.wifi_state_info)
             if (msg.what == 0) {
-                if (wifi_state_info.text.length == 0 || wifi_state_info.text.length >= 15) {
-                    wifi_state_info.text = "WiFi 연결 시도 중"
+                if (id_wifi_state_info.text.length == 0 || id_wifi_state_info.text.length >= 15) {
+                    id_wifi_state_info.text = "WiFi 연결 시도 중"
                 } else {
-                    wifi_state_info.append(".")
+                    id_wifi_state_info.append(".")
                 }
             } else if (msg.what == 1) {
-                wifi_state_info.text = "WiFi 연결 완료"
+                id_wifi_state_info.text = "WiFi 연결 완료"
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {
-                wifi_state_info.text = "WiFi 연결 실패"
+                id_wifi_state_info.text = "WiFi 연결 실패"
                 val digBuilder = AlertDialog.Builder(this@LogoActivity)
                     .setTitle("Wifi Error")
                     .setMessage("연결할 수 있는 WiFi가 없습니다.\n" + "애플리케이션을 종료합니다.")

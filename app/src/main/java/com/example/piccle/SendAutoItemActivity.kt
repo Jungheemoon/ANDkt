@@ -85,13 +85,13 @@ class SendAutoItemActivity : AppCompatActivity() {
         // 사진 파일 불러오기
         val imageCursor =
             contentResolver.query(images, imagesProjection, null, null, MediaStore.Images.Media.DATE_TAKEN + " desc ")
-        val imageDateIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN)
+        val imageDateIndex = imageCursor?.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN)
         // 최신 사진으로 이동
         if (imageCursor != null && imageCursor.count > 0) {
             imageCursor.moveToFirst()
-            val imageDate = imageCursor.getString(imageDateIndex)
+            val imageDate = imageDateIndex?.let { imageCursor.getString(it) }
             // 최종 동기화 날짜보다 이전 날짜일 경우 중지
-            if (isValidDate(mLastDate, imageDate)) {
+            if (imageDate?.let { isValidDate(mLastDate, it) } == true) {
                 mIsNewFile = true
             }
         }
@@ -103,14 +103,14 @@ class SendAutoItemActivity : AppCompatActivity() {
         // 동영상 파일 불러오기
         val videoCursor =
             contentResolver.query(videos, videosProjection, null, null, MediaStore.Video.Media.DATE_TAKEN + " desc ")
-        val videoDateIndex = videoCursor.getColumnIndex(MediaStore.Video.Media.DATE_TAKEN)
+        val videoDateIndex = videoCursor?.getColumnIndex(MediaStore.Video.Media.DATE_TAKEN)
         // 최신 동영상으로 이동
         if (videoCursor != null && videoCursor.count > 0) {
             videoCursor.moveToFirst()
 
-            val videoDate = videoCursor.getString(videoDateIndex)
+            val videoDate = videoDateIndex?.let { videoCursor.getString(it) }
             // 최종 동기화 날짜보다 이전 날짜일 경우 중지
-            if (isValidDate(mLastDate, videoDate)) {
+            if (videoDate?.let { isValidDate(mLastDate, it) } == true) {
                 mIsNewFile = true
             }
         }

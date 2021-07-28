@@ -9,6 +9,7 @@ import com.example.piccle.Constants.Companion.MODE
 import com.example.piccle.Constants.Companion.MODE_ALL
 import com.example.piccle.R
 import com.example.piccle.SharedData
+import kotlinx.android.synthetic.main.activity_progress.*
 
 
 class ProgressActivity : AppCompatActivity() {

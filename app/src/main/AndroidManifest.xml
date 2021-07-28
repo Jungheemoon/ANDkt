@@ -32,33 +32,33 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".mode.auto.SendAutoItemActivity">
+        <activity android:name=".SendAutoItemActivity">
         </activity>
 
         <service
-            android:name=".mode.auto.SendAutoItemService"
+            android:name=".SendAutoItemService"
             android:enabled="true"
             android:exported="true">
         </service>
 
         <service
-            android:name=".mode.selected.SendSelectedItemService"
+            android:name=".SendSelectedItemService"
             android:enabled="true"
             android:exported="true">
         </service>
 
         <activity
-            android:name=".mode.selected.SendSelectedItemActivity"
+            android:name=".SendSelectedItemActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name=".progress.ProgressActivity"
+            android:name=".ProgressActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <service
-            android:name=".progress.ProgressNotificationService"
+            android:name=".ProgressNotificationService"
             android:enabled="true"
             android:exported="true">
         </service>
